@@ -16,7 +16,7 @@ pub fn b58ify(input: &str) -> Result<String, ()> {
     ALPHANUMSET
         .get_or_init(|| { 
             HashSet::<char>::from_iter(
-                "0123456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKMNPQRSTUVWXYZ".chars()
+                "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".chars()
             ) 
         });
     let input_chars = input.chars();
@@ -28,6 +28,8 @@ pub fn b58ify(input: &str) -> Result<String, ()> {
         if !ALPHANUMSET.get_unchecked().contains(&c){
             return Err(()) 
         }
+        // Map characters which don't create the possibliity of collision
+        // Unfortunately, mapping 0 is collision prone
         if c == 'O' {
             mapped.push('o')
         } else if c == 'l' {
@@ -38,4 +40,17 @@ pub fn b58ify(input: &str) -> Result<String, ()> {
     }
     };
     Ok(mapped)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::b58ify;
+
+    #[test]
+    fn test_b58ify() {
+        assert_eq!(b58ify("hello"), Ok("heLLo".to_string()));
+        assert_eq!(b58ify("HELLO"), Ok("HELLo".to_string()));
+        assert_eq!(b58ify("hell0"), Err(()));
+        assert_eq!(b58ify("hello, world"), Err(()));
+    }
 }
