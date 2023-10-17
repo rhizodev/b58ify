@@ -1,12 +1,12 @@
 [package]
 name = "b58ify"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "b58ify is used to perform a simple conversion to convert alphanumeric strings into a b58 valid counterpart"
 license = "MIT"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["lib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
